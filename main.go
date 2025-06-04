@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"html/template"
 	"log"
 	"math/rand"
@@ -10,18 +11,20 @@ import (
 )
 
 type Track struct {
-	Title    string
-	Filename string
-	Cover    string
+	Title    string `json:"title"`
+	Filename string `json:"filename"`
+	Cover    string `json:"cover"`
 }
 
 func main() {
+	// Статические файлы
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("front/static"))))
 	http.Handle("/music/", http.StripPrefix("/music/", http.FileServer(http.Dir("music"))))
 	http.Handle("/covers/", http.StripPrefix("/covers/", http.FileServer(http.Dir("covers"))))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("front/assets"))))
 	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("front/assets/images"))))
 
-
+	// Главная страница
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		files, _ := os.ReadDir("music")
 		coverPool, _ := getCoverPool("covers")
@@ -37,9 +40,34 @@ func main() {
 			}
 		}
 
-		template.Must(template.ParseFiles("front/templates/index.html")).Execute(w, map[string]any{
+		tmpl := template.Must(template.ParseFiles("front/templates/index.html"))
+		tmpl.Execute(w, map[string]any{
 			"Tracks": tracks,
 		})
+	})
+
+	// Поиск
+	http.HandleFunc("/search", func(w http.ResponseWriter, r *http.Request) {
+		query := r.URL.Query().Get("q")
+		files, _ := os.ReadDir("music")
+		coverPool, _ := getCoverPool("covers")
+
+		var results []Track
+		for _, file := range files {
+			if !file.IsDir() && strings.HasSuffix(file.Name(), ".mp3") {
+				title := strings.TrimSuffix(file.Name(), ".mp3")
+				if strings.Contains(strings.ToLower(title), strings.ToLower(query)) {
+					results = append(results, Track{
+						Title:    title,
+						Filename: file.Name(),
+						Cover:    getRandomCover(coverPool),
+					})
+				}
+			}
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(results)
 	})
 
 	log.Println("Server running at http://localhost:8080")
@@ -54,7 +82,7 @@ func getCoverPool(dir string) ([]string, error) {
 	}
 
 	for _, entry := range entries {
-		if !entry.IsDir() && strings.HasSuffix(entry.Name(), ".jpg") {
+		if !entry.IsDir() && (strings.HasSuffix(entry.Name(), ".jpg") || strings.HasSuffix(entry.Name(), ".png")) {
 			covers = append(covers, entry.Name())
 		}
 	}
