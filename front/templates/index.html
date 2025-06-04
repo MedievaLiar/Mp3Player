@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Music Player</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="header">
+    <h1>Music Player</h1>
+  </div>
+
+  <div class="tracks-container">
+    {{range .Tracks}}
+    <div class="track" data-filename="{{.Filename}}">
+      <img src="/covers/{{.Cover}}" alt="Cover" class="track-cover">
+      <div class="track-info">
+        <h3>{{.Title}}</h3>
+        <button class="play-btn" onclick="playTrack('{{.Filename}}')">▶</button>
+      </div>
+    </div>
+    {{end}}
+  </div>
+
+  <div class="player-container">
+    <audio id="player"></audio>
+
+    <!-- Верхняя панель с информацией -->
+    <div class="player-info-panel">
+      <div class="now-playing">
+        <span id="now-playing-title">Not playing</span>
+        <span id="now-playing-artist" class="artist-name"></span>    <span id="now-playing-artist" class="artist-name"></span>
+      </div>
+
+      <div class="player-top-controls">
+        <div class="volume-control">
+          <span class="volume-icon">🔊</span>
+          <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1">
+        </div>
+
+        <div id="time-display" class="time-display">0:00 / 0:00</div>
+      </div>
+    </div>
+
+    <!-- Основной прогресс-бар -->
+    <div id="progress-container" class="progress-container">
+      <div id="progress-bar" class="progress-bar"></div>
+      <div id="progress-hover" class="progress-hover"></div>
+    </div>
+
+    <!-- Основные кнопки управления -->
+    <div class="player-main-controls">
+      <button class="control-btn main-control" id="prev-btn">⏮</button>
+      <button class="control-btn play-pause-btn" id="play-pause-btn">▶</button>
+      <button class="control-btn main-control" id="next-btn">⏭</button>
+    </div>
+
+    <!-- Дополнительные кнопки -->
+    <div class="player-extra-controls">
+      <button class="control-btn extra-control" id="loop-btn" title="Repeat">🔁</button>
+      <button class="control-btn extra-control" id="shuffle-btn" title="Shuffle">🔀</button>
+    </div>
+  </div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
