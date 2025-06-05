@@ -8,13 +8,15 @@
 
 * {
     font-family: 'Papyrus', sans-serif;
+    color: #e0e0e0;
+    outline: none !important;
 }
 
 body {
     margin: 0;
     padding: 0;
-    background: linear-gradient(rgba(10, 5, 20, 0.9), rgba(5, 2, 15, 0.95)),
-                url('/assets/images/back1.jpg') center/cover no-repeat fixed;
+    background: linear-gradient(rgba(10, 5, 20, 0.4), rgba(5, 2, 15, 0.5)),
+                url('/assets/images/back.jpg') center/cover no-repeat fixed;
     color: #fff;
     min-height: 100vh;
 }
@@ -26,34 +28,73 @@ body {
 
 h1 {
     margin: 0;
-    font-size: 2.5rem;
-    color: #e0aaff;
+    font-size: 2.2rem;
+    color: #e0aae0;
     text-shadow: 0 0 20px rgba(224, 170, 255, 0.8);
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    font-weight: normal;
 }
 
 .tracks-container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 0 20px 160px;
+    padding: 0 20px 120px;
+    perspective: 800px;
 }
 
-.track {
+/*.track {
     display: flex;
     align-items: center;
-    background: rgba(50, 35, 80, 0.6);
+    background: rgba(70, 60, 90, 0.8);
     border-radius: 15px;
     padding: 15px;
     margin-bottom: 15px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(199, 125, 255, 0.3);
+    backdrop-filter: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     transition: all 0.3s ease;
     justify-content: space-between;
+    transform-style: preserve-3d;
+    transform: scale(0.95);
+    opacity: 0.8;
+}*/
+
+.track {
+  display: flex;
+  /*flex-direction: column;*/
+  align-items: center;
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.2));
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  transition: box-shadow 0.3s ease;
 }
 
+/*.track-visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.tracks-container:hover .track {
+    transform: scale(0.9);
+    opacity: 0.7;
+}
+
+.tracks-container:hover .track:hover {
+    transform: scale(1.05);
+    opacity: 1;
+    z-index: 2;
+}*/
+
 .track:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(123, 44, 191, 0.4);
+    transform: translateY(-3px) scale(1);
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+    opacity: 1;
+    z-index: 1;
 }
 
 .track-cover {
@@ -69,6 +110,8 @@ h1 {
     flex: 1;
     min-width: 0;
     margin-right: 15px;
+    position: relative;
+    z-index: 1;
 }
 
 .track-info h3 {
@@ -76,6 +119,11 @@ h1 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.track.playing {
+    background: rgba(70, 50, 100, 0.7);
+    box-shadow: 0 0 25px rgba(199, 125, 255, 0.5);
 }
 
 .play-btn {
@@ -255,11 +303,6 @@ h1 {
     box-shadow: 0 0 15px rgba(181, 110, 241, 0.7);
 }
 
-.track.playing {
-    background: rgba(70, 50, 100, 0.7);
-    box-shadow: 0 0 25px rgba(199, 125, 255, 0.5);
-}
-
 #player {
     display: none;
 }
@@ -307,16 +350,17 @@ h1 {
 }
 
 .visualizer-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity: 0.3;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    opacity: 0.7;
 }
 
 #visualizer {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
 }
