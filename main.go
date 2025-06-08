@@ -17,14 +17,12 @@ type Track struct {
 }
 
 func main() {
-	// Статические файлы
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("front/static"))))
 	http.Handle("/music/", http.StripPrefix("/music/", http.FileServer(http.Dir("music"))))
 	http.Handle("/covers/", http.StripPrefix("/covers/", http.FileServer(http.Dir("covers"))))
 	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("front/assets"))))
-	http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("front/assets/images"))))
+	/*http.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("front/assets/images"))))*/
 
-	// Главная страница
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		files, _ := os.ReadDir("music")
 		coverPool, _ := getCoverPool("covers")
@@ -46,7 +44,6 @@ func main() {
 		})
 	})
 
-	// Поиск
 	http.HandleFunc("/search", func(w http.ResponseWriter, r *http.Request) {
 		query := r.URL.Query().Get("q")
 		files, _ := os.ReadDir("music")
