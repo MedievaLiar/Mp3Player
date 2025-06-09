@@ -32,7 +32,7 @@
 2. Клонировать репозиторий:
 ```bash
 git clone https://github.com/MedievaLiar/Mp3Player.git
-cd player
+cd Mp3Player
 ```
 3. Поместите свои MP3-файлы в папку `music/`
 4. Добавьте обложки в папку `covers/` - JPG/PNG, опционально
