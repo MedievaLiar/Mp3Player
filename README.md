@@ -23,7 +23,7 @@
 
 ## 🎨 Скриншот интерфейса
 
-[!player-interface](image.png)
+![player-interface](image.png)
 
 ## 🚀 Установка и запуск
 
